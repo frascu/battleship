@@ -1,5 +1,6 @@
 #include "Libreria.h"
 
+//New game loading
 void CaricaPartita ( )
 {
 	FILE *fp = NULL;
@@ -40,7 +41,7 @@ void CaricaPartita ( )
 
 	Buffer = fgetc ( fp );
 
-	if ( Buffer != EOF ) //Se c'Ë almeno un salvataggio (se non ci sono file *.tsg sar‡ creato un Indice.txt vuoto ed il suo primo carattere sar‡ EOF)
+	if ( Buffer != EOF ) //Se c'√® almeno un salvataggio (se non ci sono file *.tsg sar√† creato un Indice.txt vuoto ed il suo primo carattere sar√† EOF)
 	{
 		rewind ( fp ); //Recupero il carattere letto
 
@@ -73,7 +74,7 @@ void CaricaPartita ( )
 		{
 			ImpostaColore ( 0x6F );
 			PosizionaCursore ( 1, 20 );
-			printf ( "Scorri i salvataggi con %c ", 18 ); //Carattere Freccia Su/Freccia Gi˘
+			printf ( "Scorri i salvataggi con %c ", 18 ); //Carattere Freccia Su/Freccia Gi√π
 		}
 
 		ImpostaColore ( 0x3F );
@@ -92,7 +93,7 @@ void CaricaPartita ( )
 				InputTastiera = getch ( );
 
 			if ( InputTastiera >= 48 && InputTastiera - 48 < NumeroSalvataggiPaginaCorrente ) //Se ha premuto un tasto da 0 al numero di salvataggi della pagina
-				FlagUscita = InputTastiera; //Uscir‡ dal do while (e non eseguir‡ niente dello switch)
+				FlagUscita = InputTastiera; //Uscir√† dal do while (e non eseguir√† niente dello switch)
 
 			switch ( InputTastiera )
 			{
@@ -199,7 +200,7 @@ void CaricaPartita ( )
 				do
 				{
 					Buffer = fgetc ( fp );
-				} while ( Buffer != '\n' ); //Leggo un numero di righe pari a InputTastiera: al termine il cursore del file si trover‡ al nome del file da aprire
+				} while ( Buffer != '\n' ); //Leggo un numero di righe pari a InputTastiera: al termine il cursore del file si trover√† al nome del file da aprire
 			}
 
 			fscanf ( fp, "%s", NomeFile );
@@ -209,7 +210,7 @@ void CaricaPartita ( )
 			PlaySound ( NULL, 0, 0 ); //Sospendo l'esecuzione di musica (poteva essere stata attivata nel menu principale)
 
 			FlagUscita = 0;
-			if ( TorneoInCorso.FlagPartitaInCorso != -1 ) //Se il file non Ë corrotto
+			if ( TorneoInCorso.FlagPartitaInCorso != -1 ) //Se il file non √® corrotto
 			{
 				//Svolgimento del torneo
 				for ( i = TorneoInCorso.Calendario.PartitaDaGiocare - 1 ; ( i < TorneoInCorso.Calendario.TotalePartite && FlagUscita == 0); i++ ) //Fin quando ci sono partite da giocare e il torneo non viene interrotto
@@ -224,7 +225,7 @@ void CaricaPartita ( )
 						TorneoInCorso.Calendario.Match[i].Vincitore = VincitoreTemporaneo;
 						TorneoInCorso.Calendario.PartitaDaGiocare++;
 
-						if ( i+1 != TorneoInCorso.Calendario.TotalePartite ) //Se non si Ë giocata l'ultima partita del torneo
+						if ( i+1 != TorneoInCorso.Calendario.TotalePartite ) //Se non si √® giocata l'ultima partita del torneo
 						{
 							//Inserisco il vincitore del match nella giusta posizione all'interno del tabellone per il tunro successivo - vedi nota in NuovaPartita
 							if( i % 2 == 0 ) //Partita PARI
@@ -237,7 +238,7 @@ void CaricaPartita ( )
 
 						StampaCalendario ( &TorneoInCorso );
 
-						if ( i+1 == TorneoInCorso.Calendario.TotalePartite ) //Se si Ë giocata l'ultima partita del torneo
+						if ( i+1 == TorneoInCorso.Calendario.TotalePartite ) //Se si √® giocata l'ultima partita del torneo
 						{
 							CelebrazioneVincitoreTorneo ( TorneoInCorso.Calendario.Match[i].Vincitore, &TorneoInCorso.Impostazioni );
 							
@@ -283,7 +284,7 @@ void CaricaPartita ( )
 		do
 		{
 			InputTastiera = getch ( );
-		} while ( InputTastiera != 27 ); //FinchË non viene premuto ESC
+		} while ( InputTastiera != 27 ); //Finch√® non viene premuto ESC
 	}
 
 	fclose ( fp );
@@ -431,12 +432,12 @@ void RicreaTorneo ( torneo* Torneo, char *NomeSalvataggio )
 /*
 NB: NuovaPartita( ) inseriva il giocatore vincente di uno scontro nel campo Vincitore del medesimo scontro.
 Inoltre, se non si era giocata l'ultima partita del torneo, copiava il giocatore vincente anche in una
-determinata partita del turno successivo (perchË il vincitore deve continuare a giocare il torneo) o come Giocatore1 o come Giocatore2
+determinata partita del turno successivo (perch√® il vincitore deve continuare a giocare il torneo) o come Giocatore1 o come Giocatore2
 
-La funzione SalvaPartita( ) scrive su file informazioni solo sulle partite gi‡ giocate.
+La funzione SalvaPartita( ) scrive su file informazioni solo sulle partite gi√† giocate.
 Di conseguenza vengono perse tutte le informazioni sulle partite SUCCESSIVE a quelle giocate (che NuovaPartita ( ), invece, aveva gestito)
-Il for seguente riprende tutti i vincitori delle partite gi‡ giocate e li reinserisce come Giocatore1 o Giocatore2
-nei turni successivi. In questo modo il torneo caricato da file Ë perfettamente uguale a quello che si era scritto su file.
+Il for seguente riprende tutti i vincitori delle partite gi√† giocate e li reinserisce come Giocatore1 o Giocatore2
+nei turni successivi. In questo modo il torneo caricato da file √® perfettamente uguale a quello che si era scritto su file.
 */
 		for ( i = 0; i < Torneo->Calendario.PartitaDaGiocare - 1 ; i++) //Itero sul numero di partite giocate: prendo il vincitore e lo copio nel turno successivo
 		{
@@ -491,7 +492,7 @@ nei turni successivi. In questo modo il torneo caricato da file Ë perfettamente 
 	}
 	else
 	{
-		Torneo->FlagPartitaInCorso = -1; //-1 Ë un codice di errore. Se la variabile vale -1 il file Ë corrotto.
+		Torneo->FlagPartitaInCorso = -1; //-1 √® un codice di errore. Se la variabile vale -1 il file √® corrotto.
 	}
 
 
@@ -507,7 +508,7 @@ int NomeSalvataggioValido ( char *Nome )
 	if ( strlen ( Nome ) <= 28 )
 	{
 		for ( i = 0; i < (strlen(Nome) - 4); i++ ) //Escludo i controlli sull'estensione (i file indicizzati sono solo quelli *.tsg)
-			if ( ( Nome[i] < 48 || Nome[i] > 57 ) && ( Nome[i] < 97 || Nome[i] > 122 ) && ( Nome[i] < 65 || Nome[i] > 90 ) ) //Se Ë un carattere non alfanumerico
+			if ( ( Nome[i] < 48 || Nome[i] > 57 ) && ( Nome[i] < 97 || Nome[i] > 122 ) && ( Nome[i] < 65 || Nome[i] > 90 ) ) //Se √® un carattere non alfanumerico
 				Flag = 0;
 	}
 	else
@@ -528,7 +529,7 @@ int IndicizzaSalvataggiValidi ( void )
 	char Buffer = '0';
 	int NumeroSalvataggi = 0;
 
-	//Se c'Ë, cancello il file Indice.txt
+	//Se c'√®, cancello il file Indice.txt
 	if ( ControlloPresenzaFile ( "Indice.txt" ) )
 		remove ( "Indice.txt" );
 
@@ -548,7 +549,7 @@ int IndicizzaSalvataggiValidi ( void )
 
 	Buffer = fgetc ( fp );
 
-	if ( Buffer == EOF ) //Se non ci sono file *.tsg sar‡ creato un Indice.txt vuoto (il suo primo carattere sar‡ EOF)
+	if ( Buffer == EOF ) //Se non ci sono file *.tsg sar√† creato un Indice.txt vuoto (il suo primo carattere sar√† EOF)
 	{
 		//Cancello la scritta "File non trovato" scritta da system(" dir /B *.tsg > Indice.txt ");
 		ImpostaColore ( 0x3F );
@@ -567,7 +568,7 @@ int IndicizzaSalvataggiValidi ( void )
 
 		//Controllo quali salvataggi, tra quelli presenti nella cartella (e dunque indicizzati nel file di testo), sono validi. Quelli validi li copio in VettoreNomi
 
-		while ( FlagUscita == 0 ) //FlagUscita sar‡ settato a 1 solo se si incontrer‡ EOF
+		while ( FlagUscita == 0 ) //FlagUscita sar√† settato a 1 solo se si incontrer√† EOF
 		{
 			fsetpos ( fp, &PosizioneCorrente );
 
@@ -610,11 +611,11 @@ int IndicizzaSalvataggiValidi ( void )
 
 			NomeMaxFile[i-1] = '\0'; //Sostituisco \n con \0
 
-			fgetpos ( fp, &PosizioneCorrente ); //Salvo la posizione corrente del file (leggerÚ un carattere per vedere se incontro EOF: se non Ë EOF quel carattere dovr‡ essere riletto dal do-while precedente)
+			fgetpos ( fp, &PosizioneCorrente ); //Salvo la posizione corrente del file (legger√≤ un carattere per vedere se incontro EOF: se non √® EOF quel carattere dovr√† essere riletto dal do-while precedente)
 
 			Buffer = fgetc ( fp );
 
-			if ( Buffer == EOF ) //Controllo se Ë terminato il file
+			if ( Buffer == EOF ) //Controllo se √® terminato il file
 				FlagUscita = 1;
 
 			i = 0;
